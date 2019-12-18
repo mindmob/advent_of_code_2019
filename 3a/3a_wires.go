@@ -2,34 +2,27 @@ package main
 
 import (
 	"io/ioutil"
-	"strconv"
 	"strings"
 )
 
-type Coordinate struct {
-	X, Y int
-}
-
 func main() {
 
-	wirepath := make(map[Coordinate]int)
+	inputFileName := "input"
 
-	inputFile := "input"
-
-	reader, err := ioutil.ReadFile(inputFile)
+	reader, err := ioutil.ReadFile(inputFileName)
 	if err != nil {
 		panic(err)
 	}
 
-	lines := strings.Split(string(reader), "\n")
-
-	for _, line := range lines {
-		malen(wirepath, line)
+	wires := make([]line, 2)
+	wiresAsString := strings.Split(string(reader), "\n")
+	for _, wireString := range wiresAsString {
+		wires = append(wires, NewLineFromString(wireString))
 	}
-	//fmt.Printf("Gesamtsume: %.0f", sumOfFuel)
 
 }
 
+/*
 func malen(wirepath map[Coordinate]int, wiresString string) {
 
 	currentPosition := Coordinate{0, 0}
@@ -60,3 +53,4 @@ func malen(wirepath map[Coordinate]int, wiresString string) {
 	}
 
 }
+*/
