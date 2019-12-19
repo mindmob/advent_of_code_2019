@@ -24,3 +24,63 @@ func Test_peek(t *testing.T) {
 	assert.Equal(t, peek(input, 1, 1), 2)
 	assert.Equal(t, peek(input, 1, 0), 3)
 }
+
+func Test_jumpIfTrue(t *testing.T) {
+	input := []int{1105, 2, 16}
+	ip := 0
+	jumpIfTrue(input, &ip)
+	assert.Equal(t, ip, 16)
+
+	input = []int{1105, 0, 16}
+	ip = 0
+	jumpIfTrue(input, &ip)
+	assert.Equal(t, ip, 3)
+
+	input = []int{5, 0, 0}
+	ip = 0
+	jumpIfTrue(input, &ip)
+	assert.Equal(t, ip, 5)
+
+}
+
+func Test_jumpIfFalse(t *testing.T) {
+	input := []int{1106, 2, 16}
+	ip := 0
+	jumpIfFalse(input, &ip)
+	assert.Equal(t, ip, 3)
+
+	input = []int{1106, 0, 16}
+	ip = 0
+	jumpIfFalse(input, &ip)
+	assert.Equal(t, ip, 16)
+
+	input = []int{6, 0, 0}
+	ip = 0
+	jumpIfFalse(input, &ip)
+	assert.Equal(t, ip, 3)
+
+}
+
+func Test_lessThan(t *testing.T) {
+	input := []int{1107, 2, 16, 0}
+	ip := 0
+	lessThan(input, &ip)
+	assert.Equal(t, input[0], 1)
+
+	input = []int{1107, 3, 1, 0}
+	ip = 0
+	lessThan(input, &ip)
+	assert.Equal(t, input[0], 0)
+}
+
+func Test_equal(t *testing.T) {
+	input := []int{1108, 2, 16, 0}
+	ip := 0
+	equals(input, &ip)
+	assert.Equal(t, input[0], 0)
+
+	input = []int{1108, 2, 2, 0}
+	ip = 0
+	equals(input, &ip)
+	assert.Equal(t, input[0], 1)
+}

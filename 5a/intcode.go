@@ -16,6 +16,10 @@ func main() {
 		2: mult,
 		3: input,
 		4: output,
+		5: jumpIfTrue,
+		6: jumpIfFalse,
+		7: lessThan,
+		8: equals,
 	}
 	// rawProgram := "1,1,1,4,99,5,6,0,99"
 	rawProgram := "3,225,1,225,6,6,1100,1,238,225,104,0,101,14,135,224,101,-69,224,224,4,224,1002,223,8,223,101,3,224,224,1,224,223,223,102,90,169,224,1001,224,-4590,224,4,224,1002,223,8,223,1001,224,1,224,1,224,223,223,1102,90,45,224,1001,224,-4050,224,4,224,102,8,223,223,101,5,224,224,1,224,223,223,1001,144,32,224,101,-72,224,224,4,224,102,8,223,223,101,3,224,224,1,223,224,223,1102,36,93,225,1101,88,52,225,1002,102,38,224,101,-3534,224,224,4,224,102,8,223,223,101,4,224,224,1,223,224,223,1102,15,57,225,1102,55,49,225,1102,11,33,225,1101,56,40,225,1,131,105,224,101,-103,224,224,4,224,102,8,223,223,1001,224,2,224,1,224,223,223,1102,51,39,225,1101,45,90,225,2,173,139,224,101,-495,224,224,4,224,1002,223,8,223,1001,224,5,224,1,223,224,223,1101,68,86,224,1001,224,-154,224,4,224,102,8,223,223,1001,224,1,224,1,224,223,223,4,223,99,0,0,0,677,0,0,0,0,0,0,0,0,0,0,0,1105,0,99999,1105,227,247,1105,1,99999,1005,227,99999,1005,0,256,1105,1,99999,1106,227,99999,1106,0,265,1105,1,99999,1006,0,99999,1006,227,274,1105,1,99999,1105,1,280,1105,1,99999,1,225,225,225,1101,294,0,0,105,1,0,1105,1,99999,1106,0,300,1105,1,99999,1,225,225,225,1101,314,0,0,106,0,0,1105,1,99999,108,226,677,224,1002,223,2,223,1006,224,329,1001,223,1,223,1007,226,226,224,1002,223,2,223,1006,224,344,101,1,223,223,1008,226,226,224,102,2,223,223,1006,224,359,1001,223,1,223,107,226,677,224,1002,223,2,223,1005,224,374,101,1,223,223,1107,677,226,224,102,2,223,223,1006,224,389,101,1,223,223,108,677,677,224,102,2,223,223,1006,224,404,1001,223,1,223,1108,677,226,224,102,2,223,223,1005,224,419,101,1,223,223,1007,677,226,224,1002,223,2,223,1006,224,434,101,1,223,223,1107,226,226,224,1002,223,2,223,1006,224,449,101,1,223,223,8,677,226,224,102,2,223,223,1006,224,464,1001,223,1,223,1107,226,677,224,102,2,223,223,1005,224,479,1001,223,1,223,1007,677,677,224,102,2,223,223,1005,224,494,1001,223,1,223,1108,677,677,224,102,2,223,223,1006,224,509,101,1,223,223,1008,677,677,224,102,2,223,223,1005,224,524,1001,223,1,223,107,226,226,224,1002,223,2,223,1005,224,539,101,1,223,223,7,226,226,224,102,2,223,223,1005,224,554,101,1,223,223,1108,226,677,224,1002,223,2,223,1006,224,569,1001,223,1,223,107,677,677,224,102,2,223,223,1005,224,584,101,1,223,223,7,677,226,224,1002,223,2,223,1005,224,599,101,1,223,223,108,226,226,224,1002,223,2,223,1005,224,614,101,1,223,223,1008,677,226,224,1002,223,2,223,1005,224,629,1001,223,1,223,7,226,677,224,102,2,223,223,1005,224,644,101,1,223,223,8,677,677,224,102,2,223,223,1005,224,659,1001,223,1,223,8,226,677,224,102,2,223,223,1006,224,674,1001,223,1,223,4,223,99,226"
@@ -45,16 +49,8 @@ func runProgram(program []int, functionMap map[int]Instruction) {
 	}
 }
 
-func mult(program []int, ip *int) {
-	pMode := parseParamaterModes(program[*ip], 3)
-	p1 := peek(program, *ip+1, pMode[0])
-	p2 := peek(program, *ip+2, pMode[1])
-	result := p1 * p2
-	program[program[*ip+3]] = result
-	*ip += 4
-	fmt.Println("mult ", p1, " * ", p2, " = ", result, " => ", program[*ip+3])
-}
-
+// Opcode 1
+// Adds parameter 1 and 2, stores the result at parameter 3
 func add(program []int, ip *int) {
 	pMode := parseParamaterModes(program[*ip], 3)
 	p1 := peek(program, *ip+1, pMode[0])
@@ -65,6 +61,21 @@ func add(program []int, ip *int) {
 	fmt.Println("add ", p1, " + ", p2, " = ", result, " => ", program[*ip+3])
 }
 
+// Opcode 2
+// Multiplies parameter 1 and 2, stores the result at parameter 3
+func mult(program []int, ip *int) {
+	pMode := parseParamaterModes(program[*ip], 3)
+	p1 := peek(program, *ip+1, pMode[0])
+	p2 := peek(program, *ip+2, pMode[1])
+	result := p1 * p2
+	program[program[*ip+3]] = result
+	*ip += 4
+	fmt.Println("mult ", p1, " * ", p2, " = ", result, " => ", program[*ip+3])
+}
+
+// Opcode 3
+// Takes an input from the console,
+// stores it at parameter 1
 func input(program []int, ip *int) {
 	optCode := 0
 	fmt.Println("Input[", program[*ip+1], "]:", *ip)
@@ -73,9 +84,73 @@ func input(program []int, ip *int) {
 	*ip += 2
 }
 
+// Opcode 4
+// Outputs the first parameter to the console.
 func output(program []int, ip *int) {
-	fmt.Println("Output: ", program[program[*ip+1]])
+	pMode := parseParamaterModes(program[*ip], 1)
+	p1 := peek(program, *ip+1, pMode[0])
+	fmt.Println("Output: ", p1)
 	*ip += 2
+}
+
+// Opcode 5
+// If first parameter is non-zero, sets ip to second parameter.
+// If not, increases ip by 3 (skipping the instruction).
+func jumpIfTrue(program []int, ip *int) {
+	pMode := parseParamaterModes(program[*ip], 2)
+	p1 := peek(program, *ip+1, pMode[0])
+	p2 := peek(program, *ip+2, pMode[1])
+	if p1 != 0 {
+		*ip = p2
+	} else {
+		*ip += 3
+	}
+}
+
+// Opcode 6
+// If first parameter is zero, sets ip to second parameter.
+// If not, increases ip by 3 (skipping the instruction).
+func jumpIfFalse(program []int, ip *int) {
+	pMode := parseParamaterModes(program[*ip], 2)
+	p1 := peek(program, *ip+1, pMode[0])
+	p2 := peek(program, *ip+2, pMode[1])
+	if p1 == 0 {
+		*ip = p2
+	} else {
+		*ip += 3
+	}
+}
+
+// Opcode 7
+// if the first parameter is less than the second parameter,
+// it stores 1 in the position given by the third parameter.
+// Otherwise, it stores 0.
+func lessThan(program []int, ip *int) {
+	pMode := parseParamaterModes(program[*ip], 3)
+	p1 := peek(program, *ip+1, pMode[0])
+	p2 := peek(program, *ip+2, pMode[1])
+	if p1 < p2 {
+		program[program[*ip+3]] = 1
+	} else {
+		program[program[*ip+3]] = 0
+	}
+	*ip += 4
+}
+
+// Opcode 8
+// if the first parameter is equal to the second parameter,
+// it stores 1 in the position given by the third parameter.
+// Otherwise, it stores 0.
+func equals(program []int, ip *int) {
+	pMode := parseParamaterModes(program[*ip], 3)
+	p1 := peek(program, *ip+1, pMode[0])
+	p2 := peek(program, *ip+2, pMode[1])
+	if p1 == p2 {
+		program[program[*ip+3]] = 1
+	} else {
+		program[program[*ip+3]] = 0
+	}
+	*ip += 4
 }
 
 func parseOpCode(opCode int) int {
